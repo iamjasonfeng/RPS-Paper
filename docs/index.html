@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Regressive Plasticity Schedule: A Two-Stage Post-Training Schedule for ARC Program Synthesis</title>
+
+  <meta name="citation_title" content="Regressive Plasticity Schedule: A Two-Stage Post-Training Schedule for ARC Program Synthesis">
+  <meta name="citation_author" content="Feng, Jason">
+  <meta name="citation_publication_date" content="2026/06/19">
+  <meta name="citation_pdf_url" content="https://iamjasonfeng.github.io/RPS-Paper/rps_arc_prize_2026_paper.pdf">
+  <meta name="citation_abstract_html_url" content="https://iamjasonfeng.github.io/RPS-Paper/">
+  <meta name="citation_keywords" content="artificial intelligence; machine learning; ARC-AGI; program synthesis; curriculum learning; learning-rate schedule; post-training; reasoning">
+
+  <meta name="description" content="Regressive Plasticity Schedule, a two-stage post-training schedule for ARC program synthesis.">
+</head>
+<body>
+  <h1>Regressive Plasticity Schedule: A Two-Stage Post-Training Schedule for ARC Program Synthesis</h1>
+
+  <p><strong>Jason Feng</strong></p>
+
+  <p>
+    <a href="paper.pdf">PDF</a> ·
+    <a href="https://github.com/iamjasonfeng/RPS-Paper">GitHub</a>
+  </p>
+
+  <h2>Abstract</h2>
+  <p>
+    This paper presents Regressive Plasticity Schedule (RPS), a two-stage post-training schedule inspired by developmental plasticity. RPS combines two familiar ideas, curriculum learning and learning-rate reduction, in a specific way: the model is first trained on easier data at a higher learning rate, then trained on harder data at a substantially lower learning rate. This differs from ordinary learning-rate decay because the main intervention is not merely reducing the optimizer step size over time within one training stage; instead, RPS couples a discrete stage-level learning-rate drop to a curriculum boundary between easier and harder data. The broader motivation for RPS is to improve general reasoning: program synthesis is an important testbed here, but the more important question is whether staged plasticity can help models preserve foundational reasoning behaviors while adapting to harder domains. I tested RPS on Qwen3-8B using Alibaba Model Studio managed DPO fine-tuning with LoRA. The control condition, Equal Plasticity Schedule (EPS), used the same model, same two-stage data structure, same within-stage cosine scheduler, and same Stage 1 checkpoint, but did not reduce the Stage 2 learning rate. On ARC-AGI-1 public evaluation, RPS improved exact test-output accuracy from 10/419 to 17/419, which provides evidence of improved ARC-style general reasoning because these tasks require inferring and applying latent transformation rules from few examples. On ARC-AGI-2 public evaluation, neither RPS nor EPS solved any test outputs, but RPS substantially improved program-synthesis reliability: 234/240 attempted programs executed without error for RPS, compared with 188/240 for EPS. The result does not show that RPS solves ARC-AGI-2, but it suggests that a curriculum-coupled plasticity reduction can improve ARC-style reasoning behavior and make a model more stable at producing usable reasoning artifacts. If this pattern generalizes beyond ARC, RPS could have large potential as a simple post-training schedule for improving broader reasoning behavior.
+  </p>
+
+  <h2>Citation</h2>
+  <pre>
+Feng, Jason. 2026. Regressive Plasticity Schedule: A Two-Stage Post-Training Schedule for ARC Program Synthesis.
+  </pre>
+
+  <h2>BibTeX</h2>
+  <pre>
+@misc{feng2026rps,
+  title={Regressive Plasticity Schedule: A Two-Stage Post-Training Schedule for ARC Program Synthesis},
+  author={Feng, Jason},
+  year={2026},
+  url={https://github.com/iamjasonfeng/RPS-Paper}
+}
+  </pre>
+</body>
+</html>
