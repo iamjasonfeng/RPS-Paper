@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Regressive Plasticity Schedule: A Two-Stage Post-Training Schedule for ARC Program Synthesis</title>
 
   <meta name="citation_title" content="Regressive Plasticity Schedule: A Two-Stage Post-Training Schedule for ARC Program Synthesis">
@@ -10,37 +11,329 @@
   <meta name="citation_pdf_url" content="https://iamjasonfeng.github.io/RPS-Paper/rps_arc_prize_2026_paper.pdf">
   <meta name="citation_abstract_html_url" content="https://iamjasonfeng.github.io/RPS-Paper/">
   <meta name="citation_keywords" content="artificial intelligence; machine learning; ARC-AGI; program synthesis; curriculum learning; learning-rate schedule; post-training; reasoning">
-
   <meta name="description" content="Regressive Plasticity Schedule, a two-stage post-training schedule for ARC program synthesis.">
+
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --surface: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d9e0ea;
+      --accent: #2457c5;
+      --accent-2: #0f8f72;
+      --accent-3: #c77a12;
+      --soft-blue: #eaf0ff;
+      --soft-green: #e8f6f1;
+      --soft-gold: #fff3dc;
+      --code: #f2f4f7;
+      --shadow: 0 20px 60px rgba(23, 32, 51, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(rgba(36, 87, 197, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(36, 87, 197, 0.045) 1px, transparent 1px),
+        var(--bg);
+      background-size: 32px 32px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      min-height: 78vh;
+      display: grid;
+      align-items: center;
+      padding: 56px 0 36px;
+    }
+
+    .hero-panel {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(217, 224, 234, 0.9);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      border-radius: 8px;
+      padding: clamp(28px, 5vw, 64px);
+    }
+
+    .eyebrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 650;
+    }
+
+    .eyebrow span {
+      padding: 5px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    h1 {
+      max-width: 980px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.3rem, 6vw, 5rem);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .authors {
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: 1.15rem;
+    }
+
+    .authors strong {
+      color: var(--ink);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .button:hover {
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+
+    .button.primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: white;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 40px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      background: var(--surface);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: clamp(1.45rem, 3vw, 2.1rem);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .stat:nth-child(1) {
+      background: var(--soft-blue);
+    }
+
+    .stat:nth-child(2) {
+      background: var(--soft-green);
+    }
+
+    .stat:nth-child(3) {
+      background: var(--soft-gold);
+    }
+
+    main {
+      padding: 18px 0 72px;
+    }
+
+    section {
+      margin-top: 34px;
+      padding: clamp(24px, 4vw, 42px);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      font-size: 0.9rem;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    p {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    p + p {
+      margin-top: 16px;
+    }
+
+    pre {
+      margin: 0;
+      overflow-x: auto;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--code);
+      color: #1f2937;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    footer {
+      padding: 28px 0 52px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    @media (max-width: 820px) {
+      .page {
+        width: min(100% - 28px, 1120px);
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 28px;
+      }
+
+      .hero-panel {
+        padding: 24px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Regressive Plasticity Schedule: A Two-Stage Post-Training Schedule for ARC Program Synthesis</h1>
+  <div class="page">
+    <header class="hero">
+      <div class="hero-panel">
+        <div class="eyebrow">
+          <span>Preprint</span>
+          <span>ARC-AGI</span>
+          <span>Program Synthesis</span>
+          <span>June 19, 2026</span>
+        </div>
 
-  <p><strong>Jason Feng</strong></p>
+        <h1>Regressive Plasticity Schedule: A Two-Stage Post-Training Schedule for ARC Program Synthesis</h1>
 
-  <p>
-    <a href="rps_arc_prize_2026_paper.pdf">PDF</a> ·
-    <a href="https://github.com/iamjasonfeng/RPS-Paper">GitHub</a>
-  </p>
+        <p class="authors">
+          <strong>Jason Feng</strong>
+        </p>
 
-  <h2>Abstract</h2>
-  <p>
-    This paper presents Regressive Plasticity Schedule (RPS), a two-stage post-training schedule inspired by developmental plasticity. RPS combines two familiar ideas, curriculum learning and learning-rate reduction, in a specific way: the model is first trained on easier data at a higher learning rate, then trained on harder data at a substantially lower learning rate. This differs from ordinary learning-rate decay because the main intervention is not merely reducing the optimizer step size over time within one training stage; instead, RPS couples a discrete stage-level learning-rate drop to a curriculum boundary between easier and harder data. The broader motivation for RPS is to improve general reasoning: program synthesis is an important testbed here, but the more important question is whether staged plasticity can help models preserve foundational reasoning behaviors while adapting to harder domains. I tested RPS on Qwen3-8B using Alibaba Model Studio managed DPO fine-tuning with LoRA. The control condition, Equal Plasticity Schedule (EPS), used the same model, same two-stage data structure, same within-stage cosine scheduler, and same Stage 1 checkpoint, but did not reduce the Stage 2 learning rate. On ARC-AGI-1 public evaluation, RPS improved exact test-output accuracy from 10/419 to 17/419, which provides evidence of improved ARC-style general reasoning because these tasks require inferring and applying latent transformation rules from few examples. On ARC-AGI-2 public evaluation, neither RPS nor EPS solved any test outputs, but RPS substantially improved program-synthesis reliability: 234/240 attempted programs executed without error for RPS, compared with 188/240 for EPS. The result does not show that RPS solves ARC-AGI-2, but it suggests that a curriculum-coupled plasticity reduction can improve ARC-style reasoning behavior and make a model more stable at producing usable reasoning artifacts. If this pattern generalizes beyond ARC, RPS could have large potential as a simple post-training schedule for improving broader reasoning behavior.
-  </p>
+        <div class="actions">
+          <a class="button primary" href="rps_arc_prize_2026_paper.pdf">Read PDF</a>
+          <a class="button" href="https://github.com/iamjasonfeng/RPS-Paper">View GitHub</a>
+        </div>
 
-  <h2>Citation</h2>
-  <pre>
-Feng, Jason. 2026. Regressive Plasticity Schedule: A Two-Stage Post-Training Schedule for ARC Program Synthesis.
-  </pre>
+        <div class="stats" aria-label="Key results">
+          <div class="stat">
+            <strong>10/419 to 17/419</strong>
+            <span>ARC-AGI-1 exact test-output accuracy</span>
+          </div>
+          <div class="stat">
+            <strong>234/240</strong>
+            <span>RPS attempted programs executed without error</span>
+          </div>
+          <div class="stat">
+            <strong>188/240</strong>
+            <span>EPS attempted programs executed without error</span>
+          </div>
+        </div>
+      </div>
+    </header>
 
-  <h2>BibTeX</h2>
-  <pre>
-@misc{feng2026rps,
+    <main>
+      <section>
+        <h2>Abstract</h2>
+        <p>
+          This paper presents Regressive Plasticity Schedule (RPS), a two-stage post-training schedule inspired by developmental plasticity. RPS combines two familiar ideas, curriculum learning and learning-rate reduction, in a specific way: the model is first trained on easier data at a higher learning rate, then trained on harder data at a substantially lower learning rate. This differs from ordinary learning-rate decay because the main intervention is not merely reducing the optimizer step size over time within one training stage; instead, RPS couples a discrete stage-level learning-rate drop to a curriculum boundary between easier and harder data.
+        </p>
+        <p>
+          The broader motivation for RPS is to improve general reasoning: program synthesis is an important testbed here, but the more important question is whether staged plasticity can help models preserve foundational reasoning behaviors while adapting to harder domains. I tested RPS on Qwen3-8B using Alibaba Model Studio managed DPO fine-tuning with LoRA. The control condition, Equal Plasticity Schedule (EPS), used the same model, same two-stage data structure, same within-stage cosine scheduler, and same Stage 1 checkpoint, but did not reduce the Stage 2 learning rate.
+        </p>
+        <p>
+          On ARC-AGI-1 public evaluation, RPS improved exact test-output accuracy from 10/419 to 17/419, which provides evidence of improved ARC-style general reasoning because these tasks require inferring and applying latent transformation rules from few examples. On ARC-AGI-2 public evaluation, neither RPS nor EPS solved any test outputs, but RPS substantially improved program-synthesis reliability: 234/240 attempted programs executed without error for RPS, compared with 188/240 for EPS. The result does not show that RPS solves ARC-AGI-2, but it suggests that a curriculum-coupled plasticity reduction can improve ARC-style reasoning behavior and make a model more stable at producing usable reasoning artifacts. If this pattern generalizes beyond ARC, RPS could have large potential as a simple post-training schedule for improving broader reasoning behavior.
+        </p>
+      </section>
+
+      <section>
+        <h2>Citation</h2>
+        <pre>Feng, Jason. 2026. Regressive Plasticity Schedule: A Two-Stage Post-Training Schedule for ARC Program Synthesis.</pre>
+      </section>
+
+      <section>
+        <h2>BibTeX</h2>
+        <pre>@misc{feng2026rps,
   title={Regressive Plasticity Schedule: A Two-Stage Post-Training Schedule for ARC Program Synthesis},
   author={Feng, Jason},
   year={2026},
   url={https://github.com/iamjasonfeng/RPS-Paper}
-}
-  </pre>
+}</pre>
+      </section>
+    </main>
+
+    <footer>
+      Regressive Plasticity Schedule for ARC Program Synthesis
+    </footer>
+  </div>
 </body>
 </html>
