@@ -21,6 +21,7 @@ outputs, but 234/240 attempted programs executed without error for RPS, compared
 These preliminary results support further investigation of lower Stage 2 learning rates under this curriculum.
 They do not establish broad reasoning improvements or isolate the interaction between curriculum ordering
 and learning-rate reduction.
+
 Update notice (November 6, 2026): This revision adds discussion and citations of prior work that combined
 easy-to-hard curricula with learning-rate reductions. I was unaware of these papers when I independently
 developed RPS and conducted the original experiments. The paper now distinguishes this prior scheduling
